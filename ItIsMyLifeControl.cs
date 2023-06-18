@@ -8,8 +8,8 @@ namespace ItIsMyLife;
 
 public partial class ItIsMyLifeControl : Control
 {
-  const int _width  = 100;
-  const int _height = 100;
+  const int _width  = 256;
+  const int _height = 256;
 
   enum Cell : byte
   {
@@ -105,8 +105,10 @@ public partial class ItIsMyLifeControl : Control
       var yoff = y*_width;
       for (var x = 0; x < _width; ++x)
       {
-        var brush = _current[x + yoff] != Cell.Dead ? Brushes.Purple : Brushes.Black;
-        context.DrawRectangle(brush, null, new Rect(x*cell+1, y*cell+1, cell-1, cell-1));
+        if (_current[x + yoff] != Cell.Dead)
+        {
+          context.DrawRectangle(Brushes.Purple, null, new Rect(x*cell+1, y*cell+1, cell-1, cell-1));
+        }
       }
     }
     base.Render(context);
