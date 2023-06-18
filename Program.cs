@@ -1,7 +1,7 @@
 ﻿using Avalonia;
 using System;
 
-namespace GameOfLifeMvvm;
+namespace ItIsMyLife;
 
 class Program
 {
