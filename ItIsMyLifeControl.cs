@@ -72,7 +72,7 @@ public partial class ItIsMyLifeControl : Control
           for (var xx = -1; xx < 2; ++xx)
           {
             var fx = (_width + x + xx)%_width;
-            aliveNeighbours += !(xx == 0 && yy == 0) && _current[fx + fyoff] != Cell.Dead
+            aliveNeighbours += _current[fx + fyoff] != Cell.Dead
               ? 1 
               : 0
               ;
@@ -80,6 +80,10 @@ public partial class ItIsMyLifeControl : Control
         }
 
         var current = _current[yoff + x];
+        // If the current cell is alive the alive neighbours is +1
+        //  because the loop above loops over all cells in 3x3 block
+        //  including current
+        aliveNeighbours -= current != Cell.Dead ? 1 : 0;
 
         var next = aliveNeighbours switch
           {
