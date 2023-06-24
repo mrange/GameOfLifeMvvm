@@ -27,7 +27,7 @@ public partial class ItIsMyLifeControl : Control
     Ragnarök();
 
     _timer = new DispatcherTimer(
-        TimeSpan.FromSeconds(0.125)
+        TimeSpan.FromSeconds(0.125*0.5)
       , DispatcherPriority.SystemIdle
       , OnTimer
       );
@@ -104,6 +104,12 @@ public partial class ItIsMyLifeControl : Control
     var cellHeight = Math.Floor(b.Height/_height);
     var cell = Math.Min(cellWidth, cellHeight);
 
+    var totWidth  = cell*_width;
+    var totHeight = cell*_height;
+
+    var offX = Math.Round((b.Width  - totWidth)*0.5);
+    var offY = Math.Round((b.Height - totHeight)*0.5);
+
     for (var y = 0; y < _height; ++y)
     {
       var yoff = y*_width;
@@ -113,7 +119,7 @@ public partial class ItIsMyLifeControl : Control
         if (current != Cell.Dead)
         {
           var brush = current == Cell.Young ? Brushes.HotPink : Brushes.Purple;
-          context.DrawRectangle(brush, null, new Rect(x*cell+1, y*cell+1, cell-1, cell-1));
+          context.DrawRectangle(brush, null, new Rect(offX+x*cell+1, offY+y*cell+1, cell-1, cell-1));
         }
       }
     }
