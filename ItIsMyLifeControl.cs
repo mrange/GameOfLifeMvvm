@@ -14,7 +14,8 @@ public partial class ItIsMyLifeControl : Control
   enum Cell : byte
   {
     Dead  = 0
-  , Alive = 1
+  , Young = 1
+  , Old   = 2
   }
 
   Cell[] _current = new Cell[_width*_height];
@@ -49,7 +50,7 @@ public partial class ItIsMyLifeControl : Control
       for (var x = 0; x < _width; ++x)
       {
         var isAlive = rnd.NextDouble() > 0.5;
-        _current[x + yoff] = isAlive ? Cell.Alive : Cell.Dead;
+        _current[x + yoff] = isAlive ? Cell.Young : Cell.Dead;
       }
     }
     Next();
@@ -78,14 +79,17 @@ public partial class ItIsMyLifeControl : Control
           }
         }
 
-        _next[yoff + x] = aliveNeighbours switch
+        var current = _current[yoff + x];
+
+        var next = aliveNeighbours switch
           {
             0 => Cell.Dead
           , 1 => Cell.Dead
-          , 2 => _current[yoff + x]
-          , 3 => Cell.Alive
+          , 2 => current == Cell.Dead ? Cell.Dead   : Cell.Old
+          , 3 => current == Cell.Dead ? Cell.Young  : Cell.Old
           , _ => Cell.Dead
           };
+        _next[yoff + x] = next;
       }
     }
     var tmp = _current;
@@ -105,9 +109,11 @@ public partial class ItIsMyLifeControl : Control
       var yoff = y*_width;
       for (var x = 0; x < _width; ++x)
       {
-        if (_current[x + yoff] != Cell.Dead)
+        var current = _current[x + yoff];
+        if (current != Cell.Dead)
         {
-          context.DrawRectangle(Brushes.Purple, null, new Rect(x*cell+1, y*cell+1, cell-1, cell-1));
+          var brush = current == Cell.Young ? Brushes.HotPink : Brushes.Purple;
+          context.DrawRectangle(brush, null, new Rect(x*cell+1, y*cell+1, cell-1, cell-1));
         }
       }
     }
